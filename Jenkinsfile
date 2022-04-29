@@ -27,12 +27,19 @@ pipeline {
                 }
             }
         }
+        stage('Deploy') {
+            steps {
+                script {
+                    def deployImage = docker.build("wigryz/petclinic", ". -f Dockerpublish")
+                    deployImage.run()
+                }
+            }
+        }
         stage('Publish') {
             steps {
                 script {
                     withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
-                        def publishImage = docker.build("wigryz/petclinic", ". -f Dockerpublish")
-                        publishImage.push('latest')
+                        deployImage.push('latest')
                     }
                     sh 'echo published'
                 }
