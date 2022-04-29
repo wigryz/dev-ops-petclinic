@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                def testImage = docker.build("petclinic", "./Dockerbuild")
+                script {
+                    def testImage = docker.build("petclinic", "./Dockerbuild")
+                }
             }
 // --             post {
 // --                 // If Maven was able to run the tests, even if some of the test
@@ -17,7 +19,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-
+                
             }
         }
     }
