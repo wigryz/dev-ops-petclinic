@@ -1,0 +1,3 @@
+FROM petclinic:latest
+
+RUN cd app && ./mvnw test
