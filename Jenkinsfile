@@ -2,26 +2,38 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage("Fetch dependencies") {
             steps {
-                sh 'ls -a'
                 script {
-                    def testImage = docker.build("petclinic", "Dockerbuild")
+                    withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
+                        def dependenciesImage = docker.build("wigryz/petclinic-dep", ". -f Dockerdep")
+                        dependenciesImage.push('latest')
+                    }
+                    sh 'echo dependencies fetched'
                 }
             }
-// --             post {
-// --                 // If Maven was able to run the tests, even if some of the test
-// --                 // failed, record the test results and archive the jar file.
-// --                 success {
-// --                     junit '**/target/surefire-reports/TEST-*.xml'
-// --                     archiveArtifacts 'target/*.jar'
-// --                 }
-// --             }
+        }
+        
+        stage('Build') {
+            steps {
+                script {
+                    withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
+                        def buildImage = docker.build("wigryz/petclinic", ". -f Dockerbuild")
+                        buildImage.push('latest')
+                    }
+                    sh 'echo builded'
+                }
+            }
         }
         stage('Test') {
             steps {
-                sh 'echo testing'
-                sh 'ls -a'
+                script {
+                    withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
+                        def testImage = docker.build("wigryz/petclinic-tested", ". -f Dockertest")
+                        testImage.push('latest')
+                    }
+                    sh 'echo tested'
+                }
             }
         }
     }

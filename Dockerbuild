@@ -1,7 +1,3 @@
-FROM openjdk:16-jdk-alpine
-
-COPY app app
+FROM wigryz/petclinic-dep:latest
 
 RUN cd app && ./mvnw install -DskipTests
-
-RUN cp app/target/spring-petclinic-2.6.0-SNAPSHOT.jar app.jar
