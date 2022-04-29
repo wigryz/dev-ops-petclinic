@@ -6,8 +6,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
-                        def dependenciesImage = docker.build("wigryz/petclinic-dep", ". -f Dockerdep")
-                        dependenciesImage.push('latest')
+                        docker.build("wigryz/petclinic-dep", ". -f Dockerdep")
                     }
                     sh 'echo dependencies fetched'
                 }
@@ -18,8 +17,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
-                        def buildImage = docker.build("wigryz/petclinic", ". -f Dockerbuild")
-                        buildImage.push('latest')
+                        docker.build("wigryz/petclinic-build", ". -f Dockerbuild")
                     }
                     sh 'echo builded'
                 }
@@ -29,11 +27,19 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
-                        def testImage = docker.build("wigryz/petclinic-tested", ". -f Dockertest")
-                        testImage.push('latest')
+                        docker.build("wigryz/petclinic-test", ". -f Dockertest")
                     }
                     sh 'echo tested'
                 }
+            }
+        }
+        stage('Publish') {
+            steps {
+                script {
+                        def publishImage = docker.build("wigryz/petclinic", ". -f Dockerpublish")
+                        publishImage.push('latest')
+                }
+                sh 'echo published'
             }
         }
     }
