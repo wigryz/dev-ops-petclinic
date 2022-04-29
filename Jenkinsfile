@@ -4,8 +4,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                sh 'ls -a'
                 script {
-                    def testImage = docker.build("petclinic", "./Dockerbuild")
+                    def testImage = docker.build("petclinic", "Dockerbuild")
                 }
             }
 // --             post {
@@ -19,7 +20,8 @@ pipeline {
         }
         stage('Test') {
             steps {
-                
+                sh 'echo testing'
+                sh 'ls -a'
             }
         }
     }
