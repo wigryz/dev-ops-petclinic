@@ -5,7 +5,7 @@ pipeline {
         stage("Fetch dependencies") {
             steps {
                 script {
-                    docker.build("wigryz/petclinic-dep", ". -f Dockerdep")
+                    docker.build('petclinic-dep", ". -f Dockerdep")
                     sh 'echo dependencies fetched'
                 }
             }
@@ -14,7 +14,9 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    docker.build("wigryz/petclinic-build", ". -f Dockerbuild")
+                    def imageBuild = docker.build("petclinic-build", ". -f Dockerbuild")
+                    sh 'volume create --name output'
+                    imageBuild.run("--mount 'source=output,destination=/output'")
                     sh 'echo builded'
                 }
             }
@@ -22,7 +24,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    docker.build("wigryz/petclinic-test", ". -f Dockertest")
+                    docker.build("petclinic-test", ". -f Dockertest")
                     sh 'echo tested'
                 }
             }
@@ -30,16 +32,18 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    def deployImage = docker.build("wigryz/petclinic", ". -f Dockerpublish")
-                    deployImage.run()
+                    def deployImage = docker.build("petclinic", ". -f Dockerpublish")
+                    deployImage.run("--mount 'source=output,destination=/output'")
                 }
             }
         }
         stage('Publish') {
             steps {
                 script {
-                    withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
-                        deployImage.push('latest')
+                    def image = docker.image("petclinic")
+                    image.inside { 
+                        sh "cp /app.jar ${WORKSPACE}"
+                        archiveArtifacts 'app.jar'
                     }
                     sh 'echo published'
                 }
