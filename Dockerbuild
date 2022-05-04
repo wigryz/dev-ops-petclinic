@@ -1,3 +1,7 @@
-FROM wigryz/petclinic-dep:latest
+FROM petclinic-dep:latest
 
 RUN cd app && ./mvnw install -DskipTests
+
+RUN cd app && ls && cd target && ls
+
+RUN cp app/target/*.jar /output/app.jar

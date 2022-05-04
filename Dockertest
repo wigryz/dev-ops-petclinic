@@ -1,3 +1,3 @@
-FROM wigryz/petclinic:latest
+FROM petclinic:latest
 
 RUN cd app && ./mvnw test
