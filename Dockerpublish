@@ -4,4 +4,6 @@ RUN apk add --no-cache --upgrade bash
 
 RUN cp /input/app.jar /app.jar
 
+RUN java -jar app.jar
+
 ENTRYPOINT [ "java", "-jar", "app.jar" ]
