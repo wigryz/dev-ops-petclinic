@@ -5,7 +5,7 @@ pipeline {
         stage("Fetch dependencies") {
             steps {
                 script {
-                    docker.build('petclinic-dep", ". -f Dockerdep")
+                    docker.build("petclinic-dep", ". -f Dockerdep")
                     sh 'echo dependencies fetched'
                 }
             }
