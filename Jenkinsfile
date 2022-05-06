@@ -42,7 +42,7 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts artifacts: 'app.jar', fingerprint: true
+            archiveArtifacts artifacts: 'shared_volume/app.jar', fingerprint: true
         }
     }
 }
