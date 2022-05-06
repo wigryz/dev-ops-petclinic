@@ -2,4 +2,4 @@ FROM petclinic-dep:latest
 
 RUN cd app && ./mvnw install -DskipTests
 
-ENTRYPOINT [ "ls" ]
+ENTRYPOINT [ "sh" ]

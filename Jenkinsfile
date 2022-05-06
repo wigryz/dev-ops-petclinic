@@ -18,9 +18,9 @@ pipeline {
                     def imageBuild = docker.build("petclinic-build", ". -f Dockerbuild")
                     sh 'rm -rf shared_volume'
                     sh 'mkdir shared_volume'
-                    imageBuild.run("-v shared_volume:/output")
+                    imageBuild.run("-v /$(pwd)/shared_volume/output")
                     sh 'echo builded'
-                    sh 'ls'
+                    sh 'ls shared_volume'
                 }
             }
         }
