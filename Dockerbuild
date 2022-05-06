@@ -4,4 +4,4 @@ RUN cd app && ./mvnw install -DskipTests
 
 RUN cd app && ls && cd target && ls
 
-ENTRYPOINT [ "cp app/target/*.jar /output/app.jar" ]
+ENTRYPOINT [ "ls && cp app/target/*.jar /output/app.jar" ]
