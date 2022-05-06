@@ -39,17 +39,10 @@ pipeline {
                 }
             }
         }
-        stage('Publish') {
-            steps {
-                script {
-                    def image = docker.image("petclinic")
-                    image.inside { 
-                        sh "cp /app.jar ${WORKSPACE}"
-                        archiveArtifacts 'app.jar'
-                    }
-                    sh 'echo published'
-                }
-            }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'app.jar', fingerprint: true
         }
     }
 }
