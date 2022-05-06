@@ -14,10 +14,13 @@ pipeline {
         stage('Build') {
             steps {
                 script {
+                    sh 'ls'
                     def imageBuild = docker.build("petclinic-build", ". -f Dockerbuild")
+                    sh 'rm -rf shared_volume'
                     sh 'mkdir shared_volume'
                     imageBuild.run("-v output:/output")
                     sh 'echo builded'
+                    sh 'ls'
                 }
             }
         }
