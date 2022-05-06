@@ -2,8 +2,6 @@ FROM openjdk:16-jdk-alpine
 
 RUN apk add --no-cache --upgrade bash
 
-RUN 
+COPY shared_volume/app.jar /app.jar
 
 RUN java -jar app.jar
-
-ENTRYPOINT [ "cp /output/app.jar /app.jar && java -jar app.jar" ]

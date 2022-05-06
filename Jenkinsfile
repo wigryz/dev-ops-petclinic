@@ -19,7 +19,6 @@ pipeline {
                     sh 'rm -rf shared_volume'
                     sh 'mkdir shared_volume'
                     imageBuild.run("-v /\$(pwd)/shared_volume/output")
-                    sh 'echo builded'
                     sh 'ls shared_volume'
                 }
             }
