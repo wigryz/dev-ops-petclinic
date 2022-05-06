@@ -1,3 +1,3 @@
 FROM petclinic-build:latest
 
-RUN cd app && ./mvnw test
+RUN ./mvnw test
