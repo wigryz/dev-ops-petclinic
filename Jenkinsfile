@@ -35,7 +35,6 @@ pipeline {
             steps {
                 script {
                     def deployImage = docker.build("petclinic", ". -f Dockerpublish")
-                    deployImage.run("--mount 'source=output,destination=/output'")
                 }
             }
         }
