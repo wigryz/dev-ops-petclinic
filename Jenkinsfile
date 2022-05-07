@@ -35,6 +35,9 @@ pipeline {
             steps {
                 script {
                     def deployImage = docker.build("petclinic", ". -f Dockerpublish")
+                    imageBuild.run("--name petclinic")
+                    sh 'sleep 5'
+                    sh 'docker rm -f petclinic'
                 }
             }
         }
