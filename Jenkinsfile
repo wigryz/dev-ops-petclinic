@@ -43,8 +43,12 @@ pipeline {
         }
     }
     post {
-        always {
+        success {
+            echo 'Succeeded, now I`m saving artifact.'
             archiveArtifacts artifacts: 'shared_volume/app.jar', fingerprint: true
+        }
+        failure {
+            echo 'Failed, I`m not saving any artifacts.'
         }
     }
 }
