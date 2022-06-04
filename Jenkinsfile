@@ -34,11 +34,14 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sh 'docker rm -f petclinic'
-                    def deployImage = docker.build("petclinic", ". -f Dockerpublish")
+                    def deployImage = docker.build("wigryz/petclinic", ". -f Dockerpublish")
                     deployImage.run("--name petclinic")
                     sh 'sleep 5'
                     sh 'docker rm -f petclinic'
+                    
+                    withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
+                        deployImage.push('latest')
+                    }
                 }
             }
         }
